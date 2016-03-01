@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Contact;
+use AppBundle\Entity\Mailer;
 use AppBundle\Entity\ContactType;
 
 /**
@@ -75,15 +76,18 @@ class ContactController extends Controller
                 $contact->setWebsite($request->get('website'));
                 $contact->setType($request->get('type'));
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($contact);
-                $em->flush();
+                try {
+                  $em = $this->getDoctrine()->getManager();
+                  $em->persist($contact);
+                  $em->flush();
+                  // On envoie un mail
+                  //$mailer = new Mailer($this->get('mailer'));
+                  //$mailer->alertNewContact($contact);
 
-                // On envoie un mail
-                $mailer = new Mailer($this->get('mailer'));
-                $mailer->alertNewContact($contact);
-
-                $status = "success";
+                  $status = "success";
+                } catch (Exception $e) {
+                  $status = "error";
+                }
               }
           $response = new Response(json_encode(array("status" => $status)));
           $response->headers->set('Content-Type', 'application/json');
