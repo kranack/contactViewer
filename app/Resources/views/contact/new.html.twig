@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Contact creation</h1>
+
+    <form class="form-horizontal" method="POST">
+      <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-10">
+          <input type="text" id="name" name="name" placeholder="Name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="lastname" class="col-sm-2 control-label">Lastname</label>
+        <div class="col-sm-10">
+          <input type="text" id="lastname" name="lastname" placeholder="Lastname">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="company" class="col-sm-2 control-label">Company</label>
+        <div class="col-sm-10">
+          <input type="text" id="company" name="company" placeholder="Company">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="address" class="col-sm-2 control-label">Address</label>
+        <div class="col-sm-10">
+          <textarea id="address" name="address" placeholder="Address"></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="phone" class="col-sm-2 control-label">Phone</label>
+        <div class="col-sm-10">
+          <input type="text" id="phone" name="phone" placeholder="phone">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email" class="col-sm-2 control-label">Email</label>
+        <div class="col-sm-10">
+          <input type="email" id="email" name="email" placeholder="email">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="website" class="col-sm-2 control-label">Website</label>
+        <div class="col-sm-10">
+          <input type="text" id="website" name="website" placeholder="website">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="type" class="col-sm-2 control-label">Type de contact</label>
+        <div class="col-sm-10">
+          <select id="type" name="type">
+            {% for type in types %}
+              <option value="{{ type.value }}">{{ type.type }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <button id="createContactButton">Create</button>
+    </form>
+
+    <ul>
+        <li>
+            <a href="{{ path('contact_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}
