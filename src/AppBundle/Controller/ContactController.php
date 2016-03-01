@@ -78,6 +78,11 @@ class ContactController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($contact);
                 $em->flush();
+
+                // On envoie un mail
+                $mailer = new Mailer($this->get('mailer'));
+                $mailer->alertNewContact($contact);
+
                 $status = "success";
               }
           $response = new Response(json_encode(array("status" => $status)));
