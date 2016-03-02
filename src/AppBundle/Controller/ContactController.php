@@ -87,12 +87,12 @@ class ContactController extends Controller
                     $em->persist($contact);
                     $em->flush();
                     // On envoie un mail
-                    $mailer = new Mailer($this->get('mailer'), $this->renderView(
+                    /*$mailer = new Mailer($this->get('mailer'), $this->renderView(
                         // app/Resources/views/Emails/registration.html.twig
                         'Emails/registration.html.twig',
                         array('name' => sprintf("%s %s", $contact->getName(), $contact->getLastname()))
                     ));
-                    $mailer->alertNewContact();
+                    $mailer->alertNewContact();*/
                   } else {
                     $status = "error";
                   }
