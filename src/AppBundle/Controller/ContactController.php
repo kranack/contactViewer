@@ -62,11 +62,11 @@ class ContactController extends Controller
             return $this->redirectToRoute('contact_show', array('id' => $contact->getId()));
         }
         if ($request->getMethod() === "POST") {
-          $success = "error";
+          $status = "error";
           if (trim($request->get('lastname')) != ""
               && trim($request->get('email')) != ""
               && trim($request->get('website')) != "") {
-                print_r($contact);
+
                 $contact->setName($request->get('name'));
                 $contact->setLastname($request->get('lastname'));
                 $contact->setCompany($request->get('company'));
@@ -77,12 +77,25 @@ class ContactController extends Controller
                 $contact->setType($request->get('type'));
 
                 try {
-                  $em = $this->getDoctrine()->getManager();
-                  $em->persist($contact);
-                  $em->flush();
-                  // On envoie un mail
-                  //$mailer = new Mailer($this->get('mailer'));
-                  //$mailer->alertNewContact($contact);
+                  $contactExists = $this->getDoctrine()->getRepository('AppBundle:Contact')
+                                    ->findOneBy(array(
+                                        'name'      => $contact->getName(),
+                                        'lastname'  => $contact->getLastname()
+                                      ));
+                  if (!$contactExists) {
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($contact);
+                    $em->flush();
+                    // On envoie un mail
+                    $mailer = new Mailer($this->get('mailer'), $this->renderView(
+                        // app/Resources/views/Emails/registration.html.twig
+                        'Emails/registration.html.twig',
+                        array('name' => sprintf("%s %s", $contact->getName(), $contact->getLastname()))
+                    ));
+                    $mailer->alertNewContact();
+                  } else {
+                    $status = "error";
+                  }
 
                   $status = "success";
                 } catch (Exception $e) {

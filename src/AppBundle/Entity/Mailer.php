@@ -6,21 +6,20 @@ class Mailer {
 
   private $mailer;
 
-  public function __construct($mailer) {
+  private $renderedView;
+
+  public function __construct($mailer, $renderedView) {
     $this->mailer = $mailer;
+    $this->renderedView = $renderedView;
   }
 
-  public function alertNewContact ($contact) {
+  public function alertNewContact () {
       $message = \Swift_Message::newInstance()
        ->setSubject('New contact registred')
        ->setFrom('no-reply@example.com')
        ->setTo('admin@example.com')
        ->setBody(
-           $this->renderView( 
-               // app/Resources/views/Emails/registration.html.twig
-               'Emails/registration.html.twig',
-               array('name' => sprintf("%s %s", $contact->getName, $contact->getLastname))
-           ),
+           $this->renderedView,
            'text/html'
        )
    ;
